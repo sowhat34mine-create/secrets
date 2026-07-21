@@ -8,7 +8,7 @@
             margin: 0;
             padding: 0;
             background-color: #000;
-            background-image: url('background.jpg'); /* Имя вашей картинки */
+            background-image: url('background.jpg');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -50,9 +50,9 @@
 </head>
 <body>
 
-    <!-- Фоновый звук в формате WAV -->
-    <audio autoplay loop>
-        <source src="sound.wav" type="audio/wav"> <!-- Укажите имя вашего wav файла -->
+    <!-- Аудио элемент (без autoplay, включим через скрипт) -->
+    <audio id="questAudio" loop>
+        <source src="sound.wav" type="audio/wav">
         Ваш браузер не поддерживает аудио элемент.
     </audio>
 
@@ -60,10 +60,20 @@
         <h1>Квест начинается</h1>
         <p>Нажмите кнопку ниже, чтобы получить файл для продолжения.</p>
         
-        <!-- Если используете архив quest.zip, то меняем ссылку на него. 
-             Это решит проблему с открытием текста в браузере. -->
-        <a href="quest.zip" class="btn" download>Скачать файл</a>
+        <a href="quest.zip" class="btn" download id="downloadBtn">Скачать файл</a>
     </div>
+
+    <script>
+        // Музыка начнет играть сразу при клике на кнопку скачивания
+        const audio = document.getElementById('questAudio');
+        const btn = document.getElementById('downloadBtn');
+
+        btn.addEventListener('click', function() {
+            audio.play().catch(function(error) {
+                console.log("Браузер заблокировал воспроизведение:", error);
+            });
+        });
+    </script>
 
 </body>
 </html>

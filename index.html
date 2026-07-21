@@ -8,7 +8,8 @@
             margin: 0;
             padding: 0;
             background-color: #000;
-            background-image: url('background.jpg');
+            /* Убедитесь, что имя файла background.jpg совпадает с вашим */
+            background-image: url('background.jpg'); 
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -30,7 +31,7 @@
 
         .btn {
             display: inline-block;
-            margin-top: 20px;
+            margin: 10px; /* Отступы между кнопками */
             padding: 12px 24px;
             background-color: #222;
             color: #fff;
@@ -40,17 +41,27 @@
             font-size: 16px;
             transition: 0.2s;
             cursor: pointer;
+            font-family: monospace;
         }
 
         .btn:hover {
             background-color: #444;
             border-color: #777;
         }
+
+        /* Скрываем кнопку скачивания по умолчанию */
+        #downloadArea {
+            display: none;
+            margin-top: 20px;
+            border-top: 1px solid #444;
+            padding-top: 20px;
+        }
     </style>
 </head>
 <body>
 
-    <!-- Аудио элемент (без autoplay, включим через скрипт) -->
+    <!-- Аудио элемент (наш .wav файл) -->
+    <!-- Убедитесь, что имя файла sound.wav совпадает с вашим и лежит рядом -->
     <audio id="questAudio" loop>
         <source src="sound.wav" type="audio/wav">
         Ваш браузер не поддерживает аудио элемент.
@@ -58,19 +69,34 @@
 
     <div class="container">
         <h1>Квест начинается</h1>
-        <p>Нажмите кнопку ниже, чтобы получить файл для продолжения.</p>
+        <p>Для полного погружения рекомендуется включить звук.</p>
         
-        <a href="quest.zip" class="btn" download id="downloadBtn">Скачать файл</a>
+        <!-- Кнопка включения звука -->
+        <button id="soundBtn" class="btn">🔇 ВКЛЮЧИТЬ ЗВУК</button>
+
+        <!-- Блок, который появится после включения звука -->
+        <div id="downloadArea">
+            <p>Звук включен. Теперь можно получить файл.</p>
+            <!-- Ссылка на скачивание вашего quest.zip архива -->
+            <a href="quest.zip" class="btn" download>📥 Скачать файл</a>
+        </div>
     </div>
 
     <script>
-        // Музыка начнет играть сразу при клике на кнопку скачивания
         const audio = document.getElementById('questAudio');
-        const btn = document.getElementById('downloadBtn');
+        const soundBtn = document.getElementById('soundBtn');
+        const downloadArea = document.getElementById('downloadArea');
 
-        btn.addEventListener('click', function() {
-            audio.play().catch(function(error) {
-                console.log("Браузер заблокировал воспроизведение:", error);
+        soundBtn.addEventListener('click', function() {
+            // Пытаемся воспроизвести звук
+            audio.play().then(() => {
+                // Если звук успешно включился:
+                soundBtn.style.display = 'none'; // Скрываем кнопку звука
+                downloadArea.style.display = 'block'; // Показываем область скачивания
+            }).catch(error => {
+                // Если браузер все равно заблокировал автовоспроизведение
+                console.log("Ошибка воспроизведения:", error);
+                alert("Не удалось включить звук автоматически. Попробуйте еще раз кликнуть по кнопке.");
             });
         });
     </script>
